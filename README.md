@@ -12,7 +12,7 @@ resolvers += "scalway bintray repo" at "http://dl.bintray.com/scalway/maven"
 libraryDependencies += "com.scalway" %%% "sindb" % "0.0.1"
 ```
 
-Let assume that this is your's application model class:
+Let assume that this is your application model class:
 
 ```scala
 import upickle.default._
@@ -35,7 +35,7 @@ object db extends DatabaseDef(11, "dibitest") {
 }
 
 db.timespan.getAll() //Future[Seq[TimeSpan]]
-db.timespan.getAllBoun(lowerBound = 0)  //Future[Seq[TimeSpan]]
+db.timespan.getAllBound(lowerBound = 0)  //Future[Seq[TimeSpan]]
 db.timespan.set(timespan) //Future[Unit]
 db.timespan.get(1) //Future[TimeSpan]
 db.timespan.delete(1) //Future[Unit]

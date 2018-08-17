@@ -19,22 +19,22 @@ trait StoreApi[T, K] { orginal =>
   def get(a:K)(implicit tr:TR = null):Future[T]
   def getAll()(implicit tr:TR = null):Future[Seq[T]]
 
-//  def biMap[T2, K2](implicit b:BiMap[T,T2], k:BiMap[K, K2]) =
-//    new MappedStoreApi[T, K, T2, K2](orginal, b, k)
+  def biMap[T2, K2](implicit b:BiMap[T,T2], k:BiMap[K, K2]) =
+    new MappedStoreApi[T, K, T2, K2](orginal, b, k)
 }
 
 trait DBStoreApi[T,K] extends StoreApi[T,K] {
   def upgrade(version:Int, db:UpgradeApi):Unit
 }
 
-//class MappedStoreApi[T, K, T2, K2](orginal:StoreApi[T,K], b:BiMap[T,T2], k:BiMap[K, K2]) extends StoreApi[T2, K2] {
-//  override def delete(a: K2)(implicit tr: TR): Future[Unit] = orginal.delete(k.l2r(a))
-//  override def set(a: T2)(implicit tr:TR = null): Future[T2] = orginal.set(b.l2r(a)).map(_ => a)
-//  override def setAll(a: Seq[T2])(implicit tr:TR = null): Future[Seq[T2]] = orginal.setAll(a.map(b.l2r)).map(_ => a)
-//  override def clear()(implicit tr:TR = null): Future[Unit] = orginal.clear()
-//  override def get(a: K2)(implicit tr:TR = null): Future[T2] = orginal.get(k.l2r(a)).map(b.r2l)
-//  override def getAll()(implicit tr:TR = null): Future[Seq[T2]] = orginal.getAll().map(_.map(b.r2l))
-//}
+class MappedStoreApi[T, K, T2, K2](orginal:StoreApi[T,K], b:BiMap[T,T2], k:BiMap[K, K2]) extends StoreApi[T2, K2] {
+  override def delete(a: K2)(implicit tr: TR): Future[Unit] = orginal.delete(k.l2r(a))
+  override def set(a: T2)(implicit tr:TR = null): Future[T2] = orginal.set(b.l2r(a)).map(_ => a)
+  override def setAll(a: Seq[T2])(implicit tr:TR = null): Future[Seq[T2]] = orginal.setAll(a.map(b.l2r)).map(_ => a)
+  override def clear()(implicit tr:TR = null): Future[Unit] = orginal.clear()
+  override def get(a: K2)(implicit tr:TR = null): Future[T2] = orginal.get(k.l2r(a)).map(b.r2l)
+  override def getAll()(implicit tr:TR = null): Future[Seq[T2]] = orginal.getAll().map(_.map(b.r2l))
+}
 
 abstract class DBStoreImpl[T:ValidValue, K:ValidKey](dibil:DatabaseLowLevelApi, storeName:String, key:sourcecode.Text[T => K]) extends DBStoreApi[T, K] {
   private val kbm = implicitly[ValidKey[K]]
@@ -78,8 +78,8 @@ abstract class DBStoreImpl[T:ValidValue, K:ValidKey](dibil:DatabaseLowLevelApi, 
     _.clear()
   }.map(_ => ())
 
-  def getAllBound(lowerBound:js.UndefOr[K] = js.undefined, upperBound:js.UndefOr[K] = js.undefined)(implicit proof:ValidKeyRange[K], tr:TR = null): Future[js.Array[T]] =
-    request(false, tr) { os => os.!!.getAll(proof.create(lowerBound, upperBound)).is[IDBRequest] }
+  def getAllBound(lower:js.UndefOr[K] = js.undefined, upper:js.UndefOr[K] = js.undefined)(implicit proof:ValidKeyRange[K], tr:TR = null): Future[js.Array[T]] =
+    request(false, tr) { os => os.!!.getAll(proof.create(lower, upper)).is[IDBRequest] }
       .mapTo[js.Array[js.Any]]
       .map(_.map(vbm.js2obj))
 
