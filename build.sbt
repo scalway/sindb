@@ -4,14 +4,16 @@ lazy val core = project.in(file("sindb-core"))
     version := "0.0.1",
     licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
     organization := "com.scalway",
-    homepage := Some(url("https://github.com/DefinitelyScala/scala-js-randomseed")),
+    homepage := Some(url("https://github.com/scalway/sindb")),
     description := "very simple scala IndexedDB wrapper",
 
     scalaVersion := "2.11.12",
     crossScalaVersions := Seq("2.11.12", "2.12.6"),
 
     libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "0.9.6" withJavadoc() withSources()
+      "org.scala-js" %%% "scalajs-dom" % "0.9.6",
+      "com.lihaoyi" %%% "sourcecode" % "0.1.3",
+      "com.lihaoyi" %%% "upickle" % "0.6.5"
     ),
 
     scalacOptions ++= Seq(
