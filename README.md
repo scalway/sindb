@@ -6,6 +6,7 @@ how to use it
 ------------------------------------------------------
 You can use it in scalaJs and normal scala projects.
 in build.sbt add:
+
 ```scala
 resolvers += "scalway bintray repo" at "http://dl.bintray.com/scalway/maven"
 libraryDependencies += "com.scalway" %%% "sindb" % "0.0.1"
@@ -24,7 +25,8 @@ object TimeSpan {
 ```
 
 then in your code you can create and use database in such way:
-```
+
+```scala
 import com.scalway.sindb.DatabaseDef
 
 object db extends DatabaseDef(11, "dibitest") {
@@ -43,8 +45,8 @@ db.timespan.delete(1) //Future[Unit]
 Internals
 ---------
 
-- We use lihaoyi/sourcecode to gather path to id (rather risky way) in default implementation
-- We use lihaoyi/upickle to write scala case class objects directly to IndexedDB but you can replace this by diffrent implementation
+- We use [lihaoyi/sourcecode](https://github.com/lihaoyi/sourcecode) to gather path to id (rather risky way) in default implementation
+- We use [lihaoyi/upickle](https://github.com/lihaoyi/upickle) to write scala case class objects directly to IndexedDB but you can replace this to different implementation
 - implementation of serializers can be simply replaced by createing own DatabaseDef
 - don't know if this project'll be supported in near future. I hope but it is not used on production right now. If it'll then sure.
 
