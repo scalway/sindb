@@ -2,7 +2,6 @@ lazy val core = project.in(file("sindb-core"))
   .settings(
     name := "sindb",
     version := "0.0.1",
-    licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
     organization := "com.scalway",
     homepage := Some(url("https://github.com/scalway/sindb")),
     description := "very simple scala IndexedDB wrapper",
@@ -35,10 +34,8 @@ lazy val core = project.in(file("sindb-core"))
     bintrayPackageLabels := Seq("scala", "scala.js", "IndexedDB", "database"),
     bintrayRepository := "maven",
     bintrayVcsUrl := Some("git@github.com:scalway/sindb.git"),
-
     publishMavenStyle := true,
-    licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
-    libraryDependencies ++= Seq("org.scala-js" %%% "scalajs-dom" % "0.9.2"),
+    licenses := Seq(("MIT", url("http://opensource.org/licenses/MIT"))),
     scalaJSStage in Global := FastOptStage
   )
   .enablePlugins(ScalaJSPlugin)
